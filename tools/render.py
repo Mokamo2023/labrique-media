@@ -10,6 +10,7 @@ qui exige la photo du numéro 1). Les chemins de photos sont relatifs à la fich
 Dans les textes, *mot* passe le mot en orange (couleur Parquet).
 """
 import html, json, os, re, sys
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent
@@ -67,6 +68,77 @@ em.hl{{font-style:normal;color:{PARQUET}}}
 
 GRAIN = f'<svg class="abs grain" width="{W}" height="{H}" aria-hidden="true"><filter id="g"><feTurbulence type="fractalNoise" baseFrequency="0.8" numOctaves="3" stitchTiles="stitch"/><feColorMatrix type="saturate" values="0"/></filter><rect width="{W}" height="{H}" filter="url(#g)" opacity="0.35"/></svg>'
 
+FACE_JS = """
+() => {
+  const post = document.getElementById('post');
+  const P = post.getBoundingClientRect();
+  const pos = el => { const s = getComputedStyle(el).objectPosition.split(' '); const f = v => v && v.endsWith('%') ? parseFloat(v) / 100 : 0.5; return [f(s[0]), f(s[1])]; };
+  function faces(el) {
+    const boxes = JSON.parse(el.dataset.faces || '[]'); if (!boxes.length) return [];
+    const R = el.getBoundingClientRect(); const nw = el.naturalWidth, nh = el.naturalHeight;
+    let rw, rh, ox, oy;
+    if (getComputedStyle(el).objectFit === 'cover') { const k = Math.max(R.width / nw, R.height / nh); rw = nw * k; rh = nh * k; const [px, py] = pos(el); ox = R.left + (R.width - rw) * px; oy = R.top + (R.height - rh) * py; }
+    else { rw = R.width; rh = R.height; ox = R.left; oy = R.top; }
+    let C = { l: Math.max(R.left, P.left), t: Math.max(R.top, P.top), r: Math.min(R.right, P.right), b: Math.min(R.bottom, P.bottom) };
+    for (let a = el.parentElement; a && a !== document.body; a = a.parentElement) {
+      if (getComputedStyle(a).overflow !== 'visible') { const A = a.getBoundingClientRect(); C = { l: Math.max(C.l, A.left), t: Math.max(C.t, A.top), r: Math.min(C.r, A.right), b: Math.min(C.b, A.bottom) }; }
+    }
+    return boxes.map(b => { const f = { l: ox + b[0] * rw, t: oy + b[1] * rh, r: ox + b[2] * rw, b: oy + b[3] * rh };
+      const v = { l: Math.max(f.l, C.l), t: Math.max(f.t, C.t), r: Math.min(f.r, C.r), b: Math.min(f.b, C.b) };
+      const A = (f.r - f.l) * (f.b - f.t), V = Math.max(0, v.r - v.l) * Math.max(0, v.b - v.t); return { v, vis: A ? V / A : 0 }; });
+  }
+  function texts() {
+    const out = []; const w = document.createTreeWalker(post, NodeFilter.SHOW_TEXT); let n;
+    while ((n = w.nextNode())) { if (!n.textContent.trim() || n.parentElement.closest('[data-behind]')) continue;
+      const r = document.createRange(); r.selectNodeContents(n); for (const q of r.getClientRects()) out.push({ l: q.left - 8, t: q.top - 8, r: q.right + 8, b: q.bottom + 8, txt: n.textContent.trim().slice(0, 40) }); }
+    return out;
+  }
+  function issues() {
+    const T = texts(), out = [];
+    for (const im of post.querySelectorAll('img[data-faces]')) for (const f of faces(im)) {
+      if (f.vis < 0.6) out.push({ type: 'visage coupé', score: 1e5 * (1 - f.vis) });
+      for (const t of T) { const ix = Math.min(t.r, f.v.r) - Math.max(t.l, f.v.l), iy = Math.min(t.b, f.v.b) - Math.max(t.t, f.v.t); if (ix > 0 && iy > 0) out.push({ type: 'texte sur un visage', txt: t.txt, score: ix * iy }); }
+    }
+    return out;
+  }
+  const total = () => issues().reduce((a, b) => a + b.score, 0);
+  const changes = [];
+  for (const im of post.querySelectorAll('img[data-faces]')) {
+    if (!JSON.parse(im.dataset.faces).length || !issues().length) continue;
+    const st = im.style, abs = getComputedStyle(im).position === 'absolute', cover = getComputedStyle(im).objectFit === 'cover';
+    const orig = { op: st.objectPosition, top: st.top, h: st.height, mt: st.marginTop, w: st.width, mask: st.webkitMaskImage };
+    const H0 = im.getBoundingClientRect().height, top0 = parseFloat(getComputedStyle(im).top) || 0, W0 = im.getBoundingClientRect().width;
+    const cands = [];
+    if (cover) {
+      const [x0, y0] = pos(im).map(v => Math.round(v * 100));
+      const ys = [...new Set([y0, 0, 5, 10, 15, 20, 25, 30, 40, 50, 60, 70, 80, 90, 100])].sort((a, b) => Math.abs(a - y0) - Math.abs(b - y0));
+      const xs = [...new Set([x0, 50, 35, 65, 20, 80, 10, 90])];
+      for (const k of [0, 80, 160, 240, 320, 400, 480]) for (const x of xs) for (const y of ys) cands.push({ x, y, k, cost: k * 10 + Math.abs(x - x0) * 3 + Math.abs(y - y0) });
+    } else {
+      for (const d of [0, 40, 80, 120, 160, 200, 240, 280, 320, 360]) for (const sc of [1, 0.9, 0.8, 0.7]) cands.push({ d, sc, cost: d + (1 - sc) * 1000 });
+    }
+    cands.sort((a, b) => a.cost - b.cost);
+    let best = null, bestScore = total();
+    for (const c of cands) {
+      if (cover) { st.objectPosition = c.x + '% ' + c.y + '%';
+        if (abs) { st.top = c.k + 'px'; st.height = (H0 - c.k) + 'px'; } else { st.marginTop = c.k + 'px'; st.height = 'calc(100% - ' + c.k + 'px)'; }
+        st.webkitMaskImage = c.k ? 'linear-gradient(180deg,transparent 0,#000 140px)' : orig.mask; }
+      else { st.top = (top0 + c.d) + 'px'; st.width = (W0 * c.sc) + 'px'; }
+      const sc = total();
+      if (sc < bestScore) { bestScore = sc; best = c; }
+      if (sc === 0) break;
+    }
+    if (best) {
+      const c = best;
+      if (cover) { st.objectPosition = c.x + '% ' + c.y + '%'; if (abs) { st.top = c.k + 'px'; st.height = (H0 - c.k) + 'px'; } else { st.marginTop = c.k + 'px'; st.height = 'calc(100% - ' + c.k + 'px)'; } st.webkitMaskImage = c.k ? 'linear-gradient(180deg,transparent 0,#000 140px)' : orig.mask; }
+      else { st.top = (top0 + c.d) + 'px'; st.width = (W0 * c.sc) + 'px'; }
+      changes.push(c);
+    } else { Object.assign(st, { objectPosition: orig.op, top: orig.top, height: orig.h, marginTop: orig.mt, width: orig.w, webkitMaskImage: orig.mask }); }
+  }
+  return { changes, issues: issues().map(i => i.type + (i.txt ? ' : ' + i.txt : '')) };
+}
+"""
+
 FIT_JS = """
 async () => {
   await document.fonts.ready;
@@ -123,7 +195,7 @@ def verdict(d, base):
     if d.get("surtitre"):
         body += f'<div class="abs kicker" style="top:150px;left:56px;right:56px;z-index:12">{esc(d["surtitre"])}</div>'
     if mode == "detour":
-        body += f'<span class="abs cond" data-fit="380" style="top:290px;left:0;width:1080px;text-align:center;font-size:430px;line-height:.82;letter-spacing:-.01em;color:{color};z-index:2;white-space:nowrap;overflow:hidden">{v}</span>'
+        body += f'<span class="abs cond" data-behind="1" data-fit="380" style="top:290px;left:0;width:1080px;text-align:center;font-size:430px;line-height:.82;letter-spacing:-.01em;color:{color};z-index:2;white-space:nowrap;overflow:hidden">{v}</span>'
         body += photo_layer(d, base)
     else:
         body += photo_layer(d, base)
@@ -154,7 +226,7 @@ def face_a_face(d, base):
     for i, side in enumerate([d["haut"], d["bas"]]):
         y = 0 if i == 0 else 675
         src = img(side["photo"], base)
-        body += f'<div class="abs" style="top:{y}px;left:0;width:1080px;height:675px;overflow:hidden">'
+        body += f'<div class="abs" style="top:{y}px;left:0;width:1080px;height:675px;overflow:hidden;background:{ENCRE}">'
         body += f'<img src="{src}" style="width:100%;height:100%;object-fit:cover;object-position:{side.get("photo_pos", "center 25%")};filter:{"grayscale(1) contrast(1.1)" if side.get("noir_et_blanc") else "contrast(1.05)"}">'
         body += '<div class="abs" style="inset:0;background:linear-gradient(180deg,rgba(18,17,16,0) 35%,rgba(18,17,16,.9) 100%)"></div>'
         stats = "".join(f'<span class="pill {"f" if j == 0 else "o"}">{esc(s)}</span>' for j, s in enumerate(side.get("stats", [])[:3]))
@@ -196,7 +268,7 @@ def echange(d, base):
     for i, e in enumerate(eq):
         x = 0 if i == 0 else 540
         src = img(e["photo"], base)
-        body += f'<div class="abs" style="top:0;left:{x}px;width:540px;height:1350px;overflow:hidden">'
+        body += f'<div class="abs" style="top:0;left:{x}px;width:540px;height:1350px;overflow:hidden;background:{ENCRE}">'
         body += f'<img src="{src}" style="width:100%;height:100%;object-fit:cover;object-position:{e.get("photo_pos", "center 20%")}">'
         body += '<div class="abs" style="inset:0;background:linear-gradient(180deg,rgba(18,17,16,.85) 0%,rgba(18,17,16,.1) 30%,rgba(18,17,16,.2) 50%,rgba(18,17,16,.95) 78%)"></div>'
         items = "".join(f'<span style="font-size:36px;font-weight:800;line-height:1.15">{esc(x_)}</span>' for x_ in e.get("recoit", []))
@@ -217,6 +289,23 @@ def build(d, base):
     return f'<!doctype html><html lang="fr"><head><meta charset="utf-8"><style>{CSS}</style></head><body><div id="post" class="{cls}">{top(d.get("pastille", "LE VERDICT"))}{body}{GRAIN}</div></body></html>'
 
 
+def annotate_faces(page_html):
+    try:
+        from faces import detect
+    except Exception as e:
+        return page_html, f"visages non vérifiés ({e})"
+    from urllib.parse import unquote, urlparse
+    notes = []
+    def repl(m):
+        uri = m.group(1)
+        path = Path(unquote(urlparse(uri).path))
+        r = detect(path)
+        notes.append(f"{path.name}: {len(r['boites'])} visage(s), {r['methode']}")
+        return f'src="{uri}" data-faces=\'{json.dumps(r["boites"])}\''
+    page_html = re.sub(r'src="(file://[^"]+)"', repl, page_html)
+    return page_html, "; ".join(notes)
+
+
 def main():
     if len(sys.argv) != 3:
         sys.exit(__doc__)
@@ -225,7 +314,8 @@ def main():
     if d["format"] not in FORMATS:
         sys.exit(f"Format inconnu : {d['format']}")
     html_path = out.with_suffix(".html")
-    html_path.write_text(build(d, fiche.parent), encoding="utf-8")
+    page, face_note = annotate_faces(build(d, fiche.parent))
+    html_path.write_text(page, encoding="utf-8")
     from playwright.sync_api import sync_playwright
     with sync_playwright() as p:
         b = p.chromium.launch()
@@ -235,13 +325,18 @@ def main():
         if not all(res["fonts"]):
             b.close()
             sys.exit("ERREUR : les polices ne se chargent pas. Ne publie pas.")
+        fx = pg.evaluate(FACE_JS)
+        if fx["issues"]:
+            pg.locator("#post").screenshot(path=str(out.with_name(out.stem + "_refuse.png")))
+            b.close()
+            sys.exit("ERREUR : " + " | ".join(sorted(set(fx["issues"]))) + ". Change photo_pos, la photo ou le format.")
         png = out.with_suffix(".png")
         pg.locator("#post").screenshot(path=str(png))
         b.close()
     from PIL import Image
     Image.open(png).convert("RGB").save(out, "JPEG", quality=93)
     png.unlink()
-    print(json.dumps({"ok": True, "sortie": str(out), "textes_sous_28px": res["small"]}, ensure_ascii=False))
+    print(json.dumps({"ok": True, "sortie": str(out), "textes_sous_28px": res["small"], "visages": face_note, "ajustements_photo": fx["changes"]}, ensure_ascii=False))
 
 
 if __name__ == "__main__":

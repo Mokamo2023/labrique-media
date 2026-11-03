@@ -1,7 +1,8 @@
 # Gabarits La Brique
 
-Rendu : `python3 tools/render.py fiche.json sortie.jpg` (1080 × 1350, JPEG). Le script s'arrête si les polices ne se chargent pas et liste les textes sous 28 px.
-Détourage (option) : `bash tools/setup.sh` une fois, puis `node tools/cutout.mjs photo.jpg photo_detouree.png`.
+Préparation (une fois par session) : `bash tools/setup.sh` (détourage et détection des visages).
+Rendu : `python3 tools/render.py fiche.json sortie.jpg` (1080 × 1350, JPEG). Le script s'arrête si les polices ne se chargent pas, liste les textes sous 28 px, et vérifie les visages : il déplace la photo automatiquement pour qu'aucun texte ne touche un visage et qu'aucun visage ne soit coupé. S'il n'y arrive pas, il refuse le rendu (fichier `_refuse.png` pour voir le problème) : change alors photo_pos, la photo ou le format. Le mot géant du verdict, placé derrière un joueur détouré, est le seul texte autorisé derrière une tête.
+Détourage (option) : `node tools/cutout.mjs photo.jpg photo_detouree.png`.
 Dans tous les textes, `*mot*` passe le mot en orange. Les chemins de photos sont relatifs à la fiche.
 
 | Format | Usage | Champs |

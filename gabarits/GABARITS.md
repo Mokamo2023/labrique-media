@@ -5,6 +5,10 @@ Rendu : `python3 tools/render_ds.py fiche.json sortie.jpg` (1080 × 1350, JPEG).
 Détourage : `node tools/cutout.mjs photo.jpg joueur_detoure.png`, puis regarde le résultat. Fantôme halftone (montage Lumière) : `"fantome": "auto"` dans la fiche, ou `python3 tools/trame.py joueur_detoure.png fantome.png`.
 L'ancien `tools/render.py` reste pour mémoire. Ne l'utilise plus.
 
+## Veille de la nuit
+
+`python3 tools/nuit.py` lit l'API publique d'ESPN (le site de la NBA bloque le conteneur) : matchs terminés, en cours et à venir avec l'heure de Bruxelles, grosses perfs classées par indice, leaders des matchs en cours avec une heure de fin estimée, Français et Belges. `--date AAAA-MM-JJ` pour une nuit précise (date américaine), `--json fichier` pour les données complètes. La feuille de match ESPN compte comme une seule source : recoupe chaque chiffre avec le résumé AP (apnews.com), NBA.com ou la presse. ESPN retire les accents : écris les noms avec leur orthographe exacte.
+
 ## Contrôles automatiques
 
 Le rendu est refusé (fichier `_refuse.png` pour voir le problème) si : les polices ne se chargent pas, un texte fait moins de 28 px, un texte, une pastille, un tableau ou un sceau touche un visage, un visage est coupé par le bord, la brique de l'Éclat touche le visage, ou l'Éclat sert hors de son cas. Le mot héros placé derrière le joueur est le seul texte permis derrière une tête. Corrige `cadre` (position du joueur), raccourcis le surtitre, ou change de montage, puis relance.

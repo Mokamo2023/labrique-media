@@ -1,0 +1,27 @@
+{
+ "composant": "PostChiffre",
+ "rupture": "record en carrière aux points",
+ "props": {
+  "montage": "eclat",
+  "chiffre": "52",
+  "photo": "joueur_detoure.png",
+  "cadre": {
+   "x": 262,
+   "y": 130,
+   "l": 760
+  },
+  "brique": {
+   "cy": 700
+  },
+  "surtitre": "Contre *Adversaire*",
+  "prenom": "Prénom",
+  "nom": "Nom",
+  "pastilles": [
+   "24 rebonds",
+   "8 contres",
+   "Score 112-111"
+  ],
+  "punchline": "Record en carrière. La brique a cédé.",
+  "meta": "LB · LE CHIFFRE / NBA"
+ }
+}

@@ -1,18 +1,45 @@
-# Gabarits La Brique
+# Gabarits La Brique (design system, style A « Affiche de match »)
 
-Préparation (une fois par session) : `bash tools/setup.sh` (détourage et détection des visages).
-Rendu : `python3 tools/render.py fiche.json sortie.jpg` (1080 × 1350, JPEG). Le script s'arrête si les polices ne se chargent pas, liste les textes sous 28 px, et vérifie les visages : il déplace la photo automatiquement pour qu'aucun texte ne touche un visage et qu'aucun visage ne soit coupé. S'il n'y arrive pas, il refuse le rendu (fichier `_refuse.png` pour voir le problème) : change alors photo_pos, la photo ou le format. Le mot géant du verdict, placé derrière un joueur détouré, est le seul texte autorisé derrière une tête.
-Détourage (option) : `node tools/cutout.mjs photo.jpg photo_detouree.png`.
-Dans tous les textes, `*mot*` passe le mot en orange. Les chemins de photos sont relatifs à la fiche.
+Préparation (une fois par session) : `bash tools/setup.sh` (détourage, détection des visages, Playwright).
+Rendu : `python3 tools/render_ds.py fiche.json sortie.jpg` (1080 × 1350, JPEG). Les composants viennent du design system (`tools/ds/`, copie du design system publié dans Claude).
+Détourage : `node tools/cutout.mjs photo.jpg joueur_detoure.png`, puis regarde le résultat. Fantôme halftone (montage Lumière) : `"fantome": "auto"` dans la fiche, ou `python3 tools/trame.py joueur_detoure.png fantome.png`.
+L'ancien `tools/render.py` reste pour mémoire. Ne l'utilise plus.
 
-| Format | Usage | Champs |
+## Contrôles automatiques
+
+Le rendu est refusé (fichier `_refuse.png` pour voir le problème) si : les polices ne se chargent pas, un texte fait moins de 28 px, un texte, une pastille, un tableau ou un sceau touche un visage, un visage est coupé par le bord, la brique de l'Éclat touche le visage, ou l'Éclat sert hors de son cas. Le mot héros placé derrière le joueur est le seul texte permis derrière une tête. Corrige `cadre` (position du joueur), raccourcis le surtitre, ou change de montage, puis relance.
+
+## Code couleur
+
+Le fond suit le verdict : SWISH sur Os (crème), REBOND sur Parquet (orange), BRIQUE sur Encre (noir). Sans verdict : Parquet pour Le Chiffre et L'Affiche, Encre pour Face à face, Classement et Échange. Ne force jamais `theme` à la main.
+
+## Composants
+
+| Ancien format | Composant | Champs principaux |
 | --- | --- | --- |
-| `verdict` | SWISH, REBOND, BRIQUE sur une perf, un match, une décision | verdict, photo, photo_mode (`detour` ou `plein`), photo_pos, surtitre, nom, pastilles (3 max), punchline |
-| `affiche` | Surtitre et deux mots géants (« SON ÉQUIPE », « IL VEUT PARTIR », « MVP QUI ? »), question nostalgique | surtitre, titre, photo, photo_pos, nom, pastilles, punchline |
-| `chiffre` | Un nombre qui raconte tout | chiffre, surtitre, photo, photo_pos, nom, pastilles, punchline |
-| `face-a-face` | Deux joueurs ou deux époques comparés | question, haut et bas : photo, photo_pos, noir_et_blanc, etiquette, nom, stats |
-| `classement` | Top 5 d'une stat | titre, photo du numéro 1, lignes : nom, equipe, valeur, unite, punchline |
-| `echange` | Proposition d'échange | titre, equipes (2) : nom, photo, photo_pos, recoit |
+| verdict | `PostVerdict` | verdict, montage, photo, cadre, surtitre, prenom, nom, pastilles (3 max), punchline, score, format |
+| chiffre | `PostChiffre` | chiffre, montage, photo, cadre, surtitre, score, verdict (facultatif), prenom, nom, pastilles, punchline |
+| affiche | `PostAffiche` | titre (deux ou trois mots géants), montage, photo, surtitre, format (LE VESTIAIRE par défaut), prenom, nom, pastilles, punchline |
+| face-a-face | `PostFaceAFace` | question, haut et bas : photo ou photoPlein, cadre, cadrage, noirEtBlanc, etiquette, prenom, nom, stats |
+| classement | `PostClassement` | titre, photo du numéro 1, lignes : nom, equipe, valeur, unite ; punchline |
+| echange | `PostEchange` | titre, equipes (2) : nom, photo ou photoPlein, cadrage, recoit |
 
-Pastilles de format conseillées : LE VERDICT, LE CHIFFRE, TRANSAT, RUMEUR À LA BARRE, FACE À FACE, LE CLASSEMENT, LES DÉCISIONS, LE VESTIAIRE, LA BRIQUE DE LA SEMAINE, RETOUR DU REBOND.
-Les fiches du dossier `exemples/` utilisent des noms fictifs.
+Champs communs : `meta` (ligne du bas à gauche, ex. « LB · VERDICT / NBA »), `signature` (à droite), `format` (pastille du bandeau : LE VERDICT, LE CHIFFRE, TRANSAT, RUMEUR À LA BARRE, FACE À FACE, LE CLASSEMENT, LES DÉCISIONS, LE VESTIAIRE, LA BRIQUE DE LA SEMAINE, RETOUR DU REBOND), `alt`. Dans les textes, `*mot*` passe le mot en accent.
+`cadre` place le joueur détouré : `{x, y, l}` = gauche, haut, largeur en px dans le visuel 1080. Par défaut `{270, 470, 900}`. Garde la tête sous le bandeau (y ≥ 120) et hors du surtitre (bande y 176 à 212 à gauche).
+
+## Les six montages (`montage`)
+
+| Montage | Quand | Réglages utiles |
+| --- | --- | --- |
+| `lumiere` | perf, match, record | `fantome: "auto"` ; joueur avec halo ambre, fantôme tramé derrière |
+| `grosplan` | portrait, déclaration, contrat | `grosPlan` (photo pour le fond bichromie, sinon la même) |
+| `echo` | action, série, dunk | rayons et deux silhouettes décalées |
+| `replay` | arbitrage, action contestée, rumeur | `etiquette`, `timecode`, `progression` (0 à 1), `cible {x, y, t}` sur la tête |
+| `carte` | fiche joueur, rookie, contrat, Transat | `carte {equipe, numero, serie, bande}`, `carteCadre {x, y, l, h, angle}` ; mot héros vertical à gauche ; `bande: false` si le joueur cache la bande |
+| `eclat` | verdict BRIQUE, record battu, rupture | le mot ou le chiffre imprimé sur la brique cassée ; `brique {cx, cy, l, h, angle}` ; hors BRIQUE, la fiche déclare `"rupture": "raison"` |
+
+Rotation : jamais deux fois le même montage d'affilée (lis la colonne J du journal). Lumière, Gros plan, Écho, Replay et Carte tournent, chacun au moins une fois sur 6 posts. Éclat garde son sens : il ne sort que quand quelque chose casse.
+
+## Exemples
+
+Les fiches de `gabarits/ds/` montrent chaque montage avec des noms fictifs. Les posts publiés du 5 novembre 2026 (contrat en Carte, 52 points en Éclat) se refont à l'identique avec `verdict_carte.json` et `chiffre_eclat.json` et la photo détourée de Wembanyama.

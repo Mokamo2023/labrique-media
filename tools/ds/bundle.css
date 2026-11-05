@@ -1,0 +1,114 @@
+/* La Brique · composants. Les valeurs viennent de tokens.css. Gabarit de référence : 1080 × 1350. */
+.lb-post { position: relative; width: var(--post-largeur); height: var(--post-hauteur); overflow: hidden; color: var(--texte); background-color: var(--fond); font-family: var(--font-sans); -webkit-font-smoothing: antialiased; }
+.lb-post *, .lb-post *::before, .lb-post *::after { box-sizing: border-box; }
+.lb-echelle { position: relative; overflow: hidden; }
+.lb-echelle > .lb-post { position: absolute; top: 0; left: 0; transform-origin: 0 0; }
+.lb-fond-affiche { background-image: radial-gradient(ellipse 80% 55% at 95% 0%, var(--halo-brique) 0%, rgba(126,32,14,0) 70%), radial-gradient(ellipse 70% 45% at 0% 60%, var(--halo-ambre) 0%, rgba(246,160,77,0) 70%), radial-gradient(ellipse 90% 40% at 50% 105%, var(--fond-bas) 0%, rgba(26,13,8,0) 75%); }
+.lb-fond-sombre { background-image: radial-gradient(ellipse 70% 50% at 100% 0%, rgba(224,78,34,.55) 0%, rgba(224,78,34,0) 70%), radial-gradient(ellipse 60% 40% at 0% 100%, rgba(246,160,77,.25) 0%, rgba(246,160,77,0) 70%); }
+.lb-fond-os { background-image: radial-gradient(ellipse 60% 40% at 100% 0%, rgba(224,78,34,.22) 0%, rgba(242,237,228,0) 70%), radial-gradient(ellipse 60% 35% at 0% 100%, rgba(240,162,74,.25) 0%, rgba(242,237,228,0) 70%); }
+.lb-abs { position: absolute; }
+.lb-cond { font-family: var(--font-cond); font-weight: 900; text-transform: uppercase; line-height: .86; }
+.lb-serif { font-family: var(--font-serif); font-style: italic; font-weight: 400; }
+.lb-accent { color: var(--texte-accent); font-style: normal; }
+.lb-nowrap { white-space: nowrap; }
+
+/* Logo */
+.lb-logo { display: inline-flex; align-items: baseline; color: inherit; line-height: 1; }
+.lb-logo-empile { flex-direction: column; align-items: flex-start; }
+
+/* Pastilles */
+.lb-pastille { display: inline-block; border-radius: var(--rayon-pastille); padding: var(--pastille-y) var(--pastille-x); font-family: var(--font-sans); font-size: 36px; line-height: 1; font-weight: 800; letter-spacing: .02em; white-space: nowrap; text-transform: uppercase; }
+.lb-pastille-pleine { background: var(--pastille-pleine-fond); color: var(--pastille-pleine-texte); }
+.lb-pastille-contour { box-shadow: var(--contour-pastille); color: var(--texte); }
+.lb-pastille-format { background: var(--pastille-format-fond); color: var(--pastille-format-texte); font-size: 28px; padding: 14px var(--pastille-x); letter-spacing: .06em; }
+.lb-pastilles { display: flex; flex-wrap: wrap; gap: var(--pastilles-ecart); }
+
+/* Surtitre, meta, tag vertical */
+.lb-surtitre { display: flex; align-items: center; gap: var(--pastilles-ecart); font-size: 30px; line-height: 1.1; font-weight: 800; letter-spacing: .06em; text-transform: uppercase; }
+.lb-surtitre-filet { display: block; flex: none; width: 60px; height: 4px; background: var(--contour); }
+.lb-meta { display: flex; justify-content: space-between; align-items: center; font-size: 28px; line-height: 1; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; opacity: .85; }
+.lb-mire { display: inline-block; position: relative; width: 28px; height: 28px; margin-right: 12px; vertical-align: middle; border-radius: 50%; box-shadow: inset 0 0 0 3px var(--contour); }
+.lb-mire::before, .lb-mire::after { content: ""; position: absolute; background: var(--contour); }
+.lb-mire::before { left: -8px; right: -8px; top: 12.5px; height: 3px; }
+.lb-mire::after { top: -8px; bottom: -8px; left: 12.5px; width: 3px; }
+.lb-tag-vertical { writing-mode: vertical-rl; transform: rotate(180deg); font-size: 28px; line-height: 1; font-weight: 800; letter-spacing: .24em; text-transform: uppercase; white-space: nowrap; opacity: .7; }
+
+/* Repères d'impression */
+.lb-repere { position: absolute; width: 44px; height: 44px; border: 0 solid var(--contour); opacity: .7; z-index: 50; pointer-events: none; }
+
+/* Grain */
+.lb-grain { position: absolute; top: 0; left: 0; mix-blend-mode: overlay; pointer-events: none; z-index: 60; }
+
+/* Mot héros extrudé */
+.lb-heros { position: absolute; font-family: var(--font-cond); font-weight: 900; text-transform: uppercase; white-space: nowrap; }
+.lb-heros-echo { color: transparent; -webkit-text-stroke: 4px var(--halo-ambre); }
+
+/* Tableau de score */
+.lb-score { display: grid; grid-template-columns: auto auto; column-gap: 22px; row-gap: 2px; align-items: end; padding: 18px 22px 14px; border-radius: var(--rayon-module); background: var(--module-fond); color: var(--module-texte); box-shadow: var(--ombre-module); }
+.lb-score-equipe { font-size: 28px; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; padding-bottom: 12px; }
+.lb-score-valeur { font-family: var(--font-cond); font-weight: 900; font-size: 96px; line-height: .86; }
+.lb-score-gagnant { color: var(--halo-ambre); }
+.lb-score-statut { grid-column: 1 / 3; margin-top: 8px; padding-top: 10px; border-top: 3px solid var(--parquet); font-size: 28px; font-weight: 800; letter-spacing: .2em; color: var(--parquet); text-align: center; text-transform: uppercase; }
+
+/* Nom du joueur */
+.lb-nom { display: block; white-space: nowrap; overflow: hidden; line-height: .86; }
+.lb-nom-prenom { font-family: var(--font-serif); font-style: italic; font-weight: 400; text-transform: none; margin-right: .14em; letter-spacing: -.01em; }
+.lb-nom-famille { font-family: var(--font-cond); font-weight: 900; text-transform: uppercase; }
+
+/* Bloc bas */
+.lb-bloc-bas { position: absolute; left: var(--marge); right: var(--marge); bottom: 52px; display: flex; flex-direction: column; gap: var(--pile); z-index: 30; }
+.lb-punchline { font-family: var(--font-serif); font-style: italic; font-weight: 400; font-size: 60px; line-height: 1.05; }
+.lb-voile-bas { position: absolute; left: 0; right: 0; bottom: 0; height: 600px; z-index: 12; background: linear-gradient(180deg, rgba(18,17,16,0) 0%, rgba(18,17,16,.7) 40%, rgba(18,17,16,.97) 100%); pointer-events: none; }
+
+/* Bandeau */
+.lb-bandeau { position: absolute; top: var(--marge-haut); left: var(--marge); right: var(--marge); display: flex; justify-content: space-between; align-items: center; z-index: 40; }
+
+/* Montages photo */
+.lb-photo { position: absolute; display: block; max-width: none; pointer-events: none; }
+.lb-photo-lumiere { filter: drop-shadow(0 0 2px var(--os)) drop-shadow(var(--halo-joueur)); -webkit-mask-image: linear-gradient(180deg, #000 78%, transparent 100%); mask-image: linear-gradient(180deg, #000 78%, transparent 100%); }
+.lb-photo-liseree { filter: drop-shadow(6px 0 0 var(--os)) drop-shadow(-6px 0 0 var(--os)) drop-shadow(0 -6px 0 var(--os)) drop-shadow(0 6px 0 var(--os)) drop-shadow(16px 18px 0 rgba(18,17,16,.55)); }
+.lb-silhouette { position: absolute; -webkit-mask-size: 100% 100%; mask-size: 100% 100%; -webkit-mask-repeat: no-repeat; mask-repeat: no-repeat; pointer-events: none; }
+.lb-fantome { mix-blend-mode: multiply; opacity: var(--opacite-fantome); }
+.lb-trame { position: absolute; inset: 0; background-image: radial-gradient(rgba(18,17,16,.32) 2.6px, transparent 3.2px); background-size: 14px 14px; pointer-events: none; }
+.lb-eclat { position: absolute; inset: 0; filter: drop-shadow(7px 0 0 var(--os)) drop-shadow(-7px 0 0 var(--os)) drop-shadow(0 7px 0 var(--os)) drop-shadow(0 -7px 0 var(--os)) drop-shadow(16px 18px 0 rgba(18,17,16,.65)); pointer-events: none; }
+.lb-eclat-coupe { position: absolute; inset: 0; overflow: hidden; isolation: isolate; }
+.lb-eclat-lumiere { position: absolute; inset: 0; mix-blend-mode: soft-light; background: linear-gradient(135deg, rgba(246,160,77,.55) 0%, rgba(246,160,77,0) 45%, rgba(126,32,14,.6) 100%); }
+
+/* Sceau verdict */
+.lb-sceau-verdict { position: absolute; filter: drop-shadow(var(--ombre-sceau)); }
+
+/* Classement */
+.lb-ligne { display: flex; align-items: center; gap: 22px; padding: 18px 26px; border-radius: var(--rayon-module); background: rgba(242,237,228,.08); }
+.lb-ligne-une { background: var(--parquet); box-shadow: 14px 14px 0 var(--halo-brique); }
+
+/* Disque VS */
+.lb-vs { position: absolute; width: 120px; height: 120px; border-radius: 50%; background: var(--parquet); color: var(--os); display: flex; align-items: center; justify-content: center; font-family: var(--font-cond); font-weight: 900; font-size: 64px; box-shadow: var(--anneau-vs); z-index: 15; }
+
+/* Pages d'aperçu */
+body { margin: 0; background: var(--encre); color: var(--os); }
+.lb-apercu { display: flex; flex-wrap: wrap; gap: 24px; align-items: flex-start; padding: 16px; }
+.lb-apercu-legende { font-family: var(--font-sans); font-size: 13px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; margin-top: 8px; color: var(--os); opacity: .8; }
+
+.lb-moitie { filter: drop-shadow(20px 24px 0 rgba(18,17,16,.62)); pointer-events: none; }
+
+/* Code couleur et réglages par thème */
+[data-theme="affiche"], [data-theme="sombre"] { --rayons: var(--os); --filtre-grosplan: url(#lb-bichromie) contrast(1.05); }
+[data-theme="os"] { --rayons: var(--parquet); --filtre-grosplan: url(#lb-bichromie-claire) contrast(1.05); }
+[data-theme="os"] .lb-voile-bas { background: linear-gradient(180deg, rgba(242,237,228,0) 0%, rgba(242,237,228,.78) 42%, rgba(242,237,228,.97) 100%); }
+
+/* Montage Replay */
+.lb-balayage { position: absolute; inset: 0; z-index: 12; pointer-events: none; background: repeating-linear-gradient(0deg, rgba(18,17,16,.22) 0 2px, rgba(18,17,16,0) 2px 6px); mix-blend-mode: multiply; }
+.lb-replay-bandeau { display: flex; align-items: center; gap: 14px; padding: 12px 22px; border-radius: var(--rayon-module); background: var(--module-fond); color: var(--module-texte); font-size: 28px; font-weight: 800; letter-spacing: .12em; box-shadow: var(--ombre-module); }
+.lb-rec { display: block; width: 22px; height: 22px; border-radius: 50%; background: var(--parquet); box-shadow: 0 0 0 4px rgba(224,78,34,.35); }
+.lb-lecture { left: var(--marge); right: var(--marge); bottom: 400px; height: 6px; border-radius: 3px; background: color-mix(in srgb, var(--contour) 35%, transparent); }
+.lb-lecture-fait { position: absolute; left: 0; top: 0; bottom: 0; border-radius: 3px; background: var(--parquet); }
+.lb-lecture-tete { position: absolute; top: 50%; width: 30px; height: 30px; margin: -15px 0 0 -15px; border-radius: 50%; background: var(--os); box-shadow: 0 0 0 5px var(--parquet); }
+
+/* Montage Carte */
+.lb-carte { position: absolute; overflow: hidden; border-radius: 28px; border: 14px solid var(--contour); box-shadow: 18px 22px 0 rgba(18,17,16,.6); background: var(--encre); }
+.lb-carte-dos { background: var(--encre); border-color: var(--contour); }
+.lb-carte-holo { position: absolute; inset: 0; background: conic-gradient(from 210deg at 30% 35%, var(--parquet), var(--halo-ambre), var(--rebond), var(--os), var(--halo-ambre), var(--parquet), var(--halo-brique), var(--parquet)); }
+.lb-carte-reflet { position: absolute; inset: 0; background: linear-gradient(115deg, rgba(242,237,228,0) 30%, rgba(242,237,228,.55) 42%, rgba(242,237,228,0) 54%, rgba(242,237,228,0) 64%, rgba(242,237,228,.3) 70%, rgba(242,237,228,0) 76%); mix-blend-mode: soft-light; }
+.lb-carte-numero { position: absolute; top: 22px; left: 22px; padding: 10px 18px; border-radius: var(--rayon-pastille); background: var(--encre); color: var(--os); font-size: 28px; font-weight: 800; letter-spacing: .08em; }
+.lb-carte-bande { position: absolute; left: 0; right: 0; bottom: 0; padding: 18px 26px 20px; background: var(--encre); color: var(--os); display: flex; justify-content: space-between; align-items: baseline; font-size: 28px; font-weight: 800; letter-spacing: .1em; }
+.lb-carte-bande .lb-cond { font-size: 64px; letter-spacing: 0; }

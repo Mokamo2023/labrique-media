@@ -1,0 +1,16 @@
+{
+ "composant": "PostVerdict",
+ "props": {
+  "montage": "echo",
+  "verdict": "SWISH",
+  "photo": "joueur_detoure.png",
+  "surtitre": "Joueur de la semaine",
+  "prenom": "Prénom",
+  "nom": "Nom",
+  "pastilles": [
+   "30,5 pts",
+   "8 rebonds"
+  ],
+  "punchline": "Rare. Profitez."
+ }
+}

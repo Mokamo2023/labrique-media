@@ -1,0 +1,19 @@
+{
+ "composant": "PostAffiche",
+ "props": {
+  "montage": "grosplan",
+  "titre": "IL VEUT *PARTIR*",
+  "photo": "joueur_detoure.png",
+  "surtitre": "Rumeur · fiabilité 3/5",
+  "format": "RUMEUR À LA BARRE",
+  "prenom": "Prénom",
+  "nom": "Nom",
+  "pastilles": [
+   "Source : média"
+  ],
+  "punchline": "Une punchline courte.",
+  "styleGrosPlan": {
+   "top": "-760px"
+  }
+ }
+}

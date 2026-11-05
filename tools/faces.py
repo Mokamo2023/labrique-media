@@ -47,7 +47,13 @@ def detect(path: Path):
     minside = int(0.06 * min(w, h))
     raw = []
     for name in CASCADES:
-        c = cv2.CascadeClassifier(cv2.data.haarcascades + name)
+        try:
+            local = TOOLS / "cascades" / name
+            c = cv2.CascadeClassifier(str(local) if local.exists() else cv2.data.haarcascades + name)
+        except Exception:
+            continue
+        if c.empty():
+            continue  # OpenCV 5 sans cascades : repli sur la silhouette
         for flip in (False, True) if "profile" in name else (False,):
             g = cv2.flip(gray, 1) if flip else gray
             for (x, y, bw, bh) in c.detectMultiScale(g, 1.08, 6, minSize=(minside, minside)):

@@ -1,0 +1,36 @@
+{
+ "composant": "PostVerdict",
+ "props": {
+  "montage": "carte",
+  "verdict": "SWISH",
+  "photo": "joueur_detoure.png",
+  "cadre": {
+   "x": 330,
+   "y": 184,
+   "l": 700
+  },
+  "carteCadre": {
+   "x": 404,
+   "y": 246,
+   "l": 576,
+   "h": 960,
+   "angle": 5
+  },
+  "carte": {
+   "equipe": "ÉQUIPE",
+   "numero": "00",
+   "serie": "2026 → 2030",
+   "bande": false
+  },
+  "surtitre": "Le contrat de *Joueur*",
+  "prenom": "Prénom",
+  "nom": "Nom",
+  "pastilles": [
+   "100 M$ · 4 ans",
+   "Max à 25 %"
+  ],
+  "punchline": "Une punchline courte.",
+  "meta": "LB · VERDICT / NBA",
+  "alt": "Prénom Nom"
+ }
+}

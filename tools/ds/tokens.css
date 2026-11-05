@@ -1,0 +1,102 @@
+/* La Brique — generated from tokens.json */
+:root, [data-theme="affiche"] {
+  --parquet: #e04e22;
+  --os: #f2ede4;
+  --encre: #121110;
+  --halo-brique: #7e200e;
+  --halo-ambre: #f6a04d;
+  --rebond: #ffd08a;
+  --fond-bas: #1a0d08;
+  --fond: var(--parquet);
+  --texte: var(--os);
+  --texte-accent: var(--halo-ambre);
+  --heros: var(--os);
+  --pastille-pleine-fond: var(--os);
+  --pastille-pleine-texte: var(--encre);
+  --pastille-format-fond: var(--encre);
+  --pastille-format-texte: var(--os);
+  --contour: var(--os);
+  --module-fond: var(--encre);
+  --module-texte: var(--os);
+  --relief: var(--halo-brique);
+  --contour-pastille: inset 0 0 0 3px #f2ede4;
+  --ombre-module: 0 0 0 3px #f2ede4, 14px 14px 0 #7e200e;
+  --ombre-sceau: 8px 10px 0 rgba(18,17,16,0.55);
+  --halo-joueur: 0 0 34px rgba(246,160,77,0.85);
+  --anneau-vs: 0 0 0 8px #121110;
+}
+[data-theme="sombre"] {
+  --fond: var(--encre);
+  --texte: var(--os);
+  --texte-accent: var(--halo-ambre);
+  --heros: var(--os);
+  --pastille-pleine-fond: var(--os);
+  --pastille-pleine-texte: var(--encre);
+  --pastille-format-fond: var(--parquet);
+  --pastille-format-texte: var(--os);
+  --contour: var(--os);
+  --module-fond: var(--encre);
+  --module-texte: var(--os);
+  --relief: var(--halo-brique);
+  --contour-pastille: inset 0 0 0 3px #f2ede4;
+}
+[data-theme="os"] {
+  --fond: var(--os);
+  --texte: var(--encre);
+  --texte-accent: var(--parquet);
+  --heros: var(--encre);
+  --pastille-pleine-fond: var(--encre);
+  --pastille-pleine-texte: var(--os);
+  --pastille-format-fond: var(--encre);
+  --pastille-format-texte: var(--os);
+  --contour: var(--encre);
+  --module-fond: var(--encre);
+  --module-texte: var(--os);
+  --relief: var(--halo-brique);
+  --contour-pastille: inset 0 0 0 4px #121110;
+}
+:root {
+  --marge: 56px;
+  --marge-haut: 48px;
+  --zone-surtitre: 176px;
+  --repere: 24px;
+  --pile: 20px;
+  --pastilles-ecart: 14px;
+  --pastille-x: 28px;
+  --pastille-y: 12px;
+  --rayon-pastille: 999px;
+  --rayon-module: 18px;
+  --rayon-conteneur: 40px;
+  --rayon-tuile: 36px;
+  --post-largeur: 1080px;
+  --post-hauteur: 1350px;
+  --story-hauteur: 1920px;
+  --texte-min: 28px;
+  --opacite-grain: 0.4;
+  --opacite-fantome: 0.42;
+  --opacite-motif: 0.16;
+  --font-cond: "Archivo Extra Condensed", "Archivo", sans-serif;
+  --font-sans: "Archivo", sans-serif;
+  --font-serif: "Instrument Serif", Georgia, serif;
+}
+.chiffre-heros { font-family: var(--font-cond); font-size: 760px; line-height: 0.8; font-weight: 900; letter-spacing: -0.02em; }
+.verdict-heros { font-family: var(--font-cond); font-size: 430px; line-height: 0.82; font-weight: 900; letter-spacing: -0.01em; }
+.titre-affiche { font-family: var(--font-cond); font-size: 250px; line-height: 0.84; font-weight: 900; }
+.logo-manifeste { font-family: var(--font-cond); font-size: 380px; line-height: 0.82; font-weight: 900; letter-spacing: -0.015em; }
+.nom-famille { font-family: var(--font-cond); font-size: 118px; line-height: 0.86; font-weight: 900; }
+.titre-format { font-family: var(--font-cond); font-size: 120px; line-height: 0.86; font-weight: 900; }
+.score { font-family: var(--font-cond); font-size: 96px; line-height: 0.86; font-weight: 900; }
+.logo-bandeau { font-family: var(--font-cond); font-size: 64px; line-height: 1; font-weight: 900; }
+.ligne-classement { font-family: var(--font-cond); font-size: 58px; line-height: 0.86; font-weight: 900; }
+.prenom { font-family: var(--font-serif); font-size: 112px; line-height: 0.86; font-weight: 400; font-style: italic; }
+.slogan { font-family: var(--font-serif); font-size: 84px; line-height: 1; font-weight: 400; font-style: italic; }
+.logo-la { font-family: var(--font-serif); font-size: 64px; line-height: 1; font-weight: 400; font-style: italic; }
+.punchline { font-family: var(--font-serif); font-size: 60px; line-height: 1.05; font-weight: 400; font-style: italic; }
+.question { font-family: var(--font-serif); font-size: 56px; line-height: 1.05; font-weight: 400; font-style: italic; }
+.pastille { font-family: var(--font-sans); font-size: 36px; line-height: 1; font-weight: 800; letter-spacing: 0.02em; }
+.surtitre { font-family: var(--font-sans); font-size: 30px; line-height: 1.1; font-weight: 800; letter-spacing: 0.06em; }
+.pastille-format { font-family: var(--font-sans); font-size: 28px; line-height: 1; font-weight: 800; letter-spacing: 0.06em; }
+.meta { font-family: var(--font-sans); font-size: 28px; line-height: 1; font-weight: 800; letter-spacing: 0.1em; }
+@font-face { font-family: "Archivo Extra Condensed"; src: url("fonts/archivo-extracondensed-latin.woff2") format("woff2"); font-weight: 100 900; font-style: normal; font-display: block; }
+@font-face { font-family: "Archivo"; src: url("fonts/archivo-latin-wdth-normal.woff2") format("woff2"); font-weight: 100 900; font-style: normal; font-display: block; }
+@font-face { font-family: "Instrument Serif"; src: url("fonts/instrument-serif-latin-400-italic.woff2") format("woff2"); font-weight: 400; font-style: italic; font-display: block; }

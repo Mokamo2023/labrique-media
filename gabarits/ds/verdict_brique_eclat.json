@@ -1,0 +1,20 @@
+{
+ "composant": "PostVerdict",
+ "props": {
+  "montage": "eclat",
+  "verdict": "BRIQUE",
+  "photo": "joueur_detoure.png",
+  "cadre": {
+   "x": 150,
+   "y": 120,
+   "l": 800
+  },
+  "surtitre": "3 sur 19 au tir",
+  "prenom": "Prénom",
+  "nom": "Nom",
+  "pastilles": [
+   "−24 au +/−"
+  ],
+  "punchline": "Ça ne touche rien."
+ }
+}

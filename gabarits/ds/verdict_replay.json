@@ -1,0 +1,27 @@
+{
+ "composant": "PostVerdict",
+ "props": {
+  "montage": "replay",
+  "verdict": "REBOND",
+  "photo": "joueur_detoure.png",
+  "etiquette": "REVU À LA VIDÉO",
+  "timecode": "REPLAY · 4E QT 00:47",
+  "surtitre": "Faute ou pas faute ?",
+  "prenom": "Prénom",
+  "nom": "Nom",
+  "pastilles": [
+   "Faute offensive"
+  ],
+  "punchline": "On en reparle en février.",
+  "cadre": {
+   "x": 200,
+   "y": 330,
+   "l": 760
+  },
+  "cible": {
+   "x": 737,
+   "y": 440,
+   "t": 360
+  }
+ }
+}

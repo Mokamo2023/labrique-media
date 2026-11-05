@@ -1,0 +1,28 @@
+{
+ "composant": "PostChiffre",
+ "props": {
+  "montage": "lumiere",
+  "chiffre": "41",
+  "photo": "joueur_detoure.png",
+  "fantome": "auto",
+  "score": [
+   {
+    "nom": "Équipe A",
+    "score": "118",
+    "gagnant": true
+   },
+   {
+    "nom": "Équipe B",
+    "score": "104"
+   }
+  ],
+  "surtitre": "Points contre *Adversaire*",
+  "prenom": "Prénom",
+  "nom": "Nom",
+  "pastilles": [
+   "9 passes",
+   "15/22 au tir"
+  ],
+  "punchline": "Une punchline courte."
+ }
+}

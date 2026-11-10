@@ -51,7 +51,7 @@
 .lb-score-statut { grid-column: 1 / 3; margin-top: 8px; padding-top: 10px; border-top: 3px solid var(--parquet); font-size: 28px; font-weight: 800; letter-spacing: .2em; color: var(--parquet); text-align: center; text-transform: uppercase; }
 
 /* Nom du joueur */
-.lb-nom { display: block; white-space: nowrap; overflow: hidden; line-height: .86; }
+.lb-nom { display: block; white-space: nowrap; overflow: hidden; line-height: .86; padding-top: .18em; margin-top: -.18em; }
 .lb-nom-prenom { font-family: var(--font-serif); font-style: italic; font-weight: 400; text-transform: none; margin-right: .14em; letter-spacing: -.01em; }
 .lb-nom-famille { font-family: var(--font-cond); font-weight: 900; text-transform: uppercase; }
 
